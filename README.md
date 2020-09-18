@@ -32,7 +32,7 @@ Be sure you have read and understand what this file does before running it.
 
 You can read the man page for each command and option to see what it does.
 
-Any time the creator of a script says it has to be run with sudo permissions or as root, inderstand why and use caution.
+Any time the creator of a script says it has to be run with sudo permissions or as root, understand why and use caution.
 
 ***This script has to be run with sudo because the apt and firewall commands it uses must be run as root.***
 
