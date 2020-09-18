@@ -12,6 +12,8 @@ This repo will perform several functions recommended for a new server and will d
 
 It is strongly recommended to only run this on clean installs. 
 
+This script is being created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
+
 ### [Project Goals](#project-goals)
 
 This project seeks to roll a few common security best practices for new servers into a script that will determine whether it's being run on CentOS or Ubuntu and will run the commands appropriate for the OS it's being run on.
