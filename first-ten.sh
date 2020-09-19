@@ -48,6 +48,41 @@ then
   Done configuring ufw firewall.
   ${normal}"
 
+  if [ -f /home/$USER/.ssh/authorized_keys ]
+  then
+  echo "${yellow}  
+  Locking down SSH so it will only permit key-based authentication.
+  ${normal}"
+  echo -n "${red}  
+    Are you sure you want to allow only key-based authentication for SSH? 
+    PASSWORD AUTHENTICATIN WILL BE DISABLED
+    (y or n)${normal}" 
+    read answer
+    
+    if [ "$answer" == "y" ] ;then
+      echo "DebianBanner no
+DisableForwarding yes
+PermitRootLogin no
+IgnoreRhosts yes
+PasswordAuthentication no
+PermitEmptyPasswords no" | sudo tee -a /etc/ssh/sshd_config.d/11-sshd-first-ten.conf 
+      echo "${yellow}
+      Reloading ssh
+      ${normal}"
+      sudo systemctl reload ssh
+      else
+      echo "${red}
+      Not locking down SSH. Please do this yourelf.
+      ${normal}"
+    fi
+
+  else
+    echo "${red}  
+  It looks like SSH is not configured to allow key based authentication.
+  Please enable it and re-run this script.${normal}"
+
+  fi
+
 elif [ "$osName" == "CentOS Linux" ]
 then
 
