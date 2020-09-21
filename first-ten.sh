@@ -7,6 +7,8 @@
 # https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu
 # Inspired by Jerry Gamblin's post:
 # https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/
+# Also by Bryan Kennedy's post:
+# https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
 
 # Defining Colors for text output
 red=$( tput setaf 1 );
