@@ -171,4 +171,15 @@ then
   ${normal}
   "
 
+####################################################
+#  If Neither CentOS / Red Hat or Ubuntu is found  #
+####################################################
+
+else
+	echo "${red}
+	I'm not sure what operating system you're running.
+	This script has only been tested for CentOS / Red Hat 
+	and Ubuntu.
+	Please run it only on those operating systems.
+	${normal}"
 fi
