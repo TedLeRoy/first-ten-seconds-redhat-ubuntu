@@ -66,7 +66,7 @@ then
       echo -n "${red}  
       Are you sure you want to allow only key-based authentication for SSH? 
       PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
-      (y or n)${normal}" 
+      (y or n):${normal} " 
       read answer
       # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
       if [ "$answer" == "y" ] ;then
@@ -139,7 +139,7 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   sudo systemctl restart fail2ban
   # Tell the user what the protections are set to
   echo "${green}
-  fail2ban is now protecting SSH with the following defaults:
+  fail2ban is now protecting SSH with the following settings:
   maxretry: 5
   findtime: 12 hours (43200 seconds)
   bantime: 24 hours (86400 seconds)
