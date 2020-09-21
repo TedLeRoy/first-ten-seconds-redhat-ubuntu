@@ -25,14 +25,16 @@ then
   You're running this script as root user.
   Please configure a non-root user and run this
   script as that non-root user.
+  Please do not start the script using sudo, but
+  enter sudo privileges when prompted.
   ${normal}"
   exit
 fi
 
-if [ "$osName" == 'Ubuntu' ]
+if [ "$osName" == "Ubuntu" ]
 then
 
-  echo "${green}  You're running Ubuntu Linux. Ubuntu security
+  echo "${green}  You're running "$osName" Linux. "$osName" security
   first measures will be applied.
 
   You will be prompted for your sudo password.
@@ -55,11 +57,16 @@ then
   ${normal}"
   echo -n "${red}  
     Are you sure you want to allow only key-based authentication for SSH? 
-    PASSWORD AUTHENTICATIN WILL BE DISABLED
+    PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
     (y or n)${normal}" 
     read answer
     
     if [ "$answer" == "y" ] ;then
+
+      echo "${yellow}
+      Adding the following lines to a file in sshd_config.d
+      ${normal}"
+
       echo "DebianBanner no
 DisableForwarding yes
 PermitRootLogin no
@@ -70,9 +77,15 @@ PermitEmptyPasswords no" | sudo tee -a /etc/ssh/sshd_config.d/11-sshd-first-ten.
       Reloading ssh
       ${normal}"
       sudo systemctl reload ssh
+      echo "${green}
+      ssh has been restarted.
+      ${normal}"
+
       else
+      
       echo "${red}
-      Not locking down SSH. Please do this yourelf.
+      You have chosen not to disable password based authentication at this time.
+      Please do so yourself or re-run this script when you're prepared to do so.
       ${normal}"
     fi
 
@@ -80,14 +93,13 @@ PermitEmptyPasswords no" | sudo tee -a /etc/ssh/sshd_config.d/11-sshd-first-ten.
     echo "${red}  
   It looks like SSH is not configured to allow key based authentication.
   Please enable it and re-run this script.${normal}"
-
   fi
 
-elif [ "$osName" == "CentOS Linux" ]
+elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ]
 then
 
-  echo "${green}  You're running CentOS Linux. CentOS security
-  first measures will be applied.
+  echo "${green}  You're running "$osName". "$osName" security first 
+  measures will be applied.
 
   You will be prompted for your sudo password.
   Please enter it when asked.
