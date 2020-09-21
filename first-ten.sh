@@ -145,6 +145,17 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   bantime: 24 hours (86400 seconds)
   ${normal}"
 
+#Explain what was done
+echo "${green}
+Description of what was done:
+1. Ensured a non-root user is set up.
+2. Ensured non-root user also has sudo permission (script won't continue without it).
+3. Ensured SSH is allowed and ufw firewall is enabled.
+4. Locked down SSH so it only allows key-based authentication if you chose "y" for that step.
+5. Installed fail2ban and configured it to protect SSH.
+[note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
+${normal}"
+
 #################################################
 #          CentOS / Red Hat Section             #
 #################################################
