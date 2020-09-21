@@ -17,7 +17,7 @@ green=$( tput setaf 2 );
 normal=$( tput sgr 0 );
 
 # Determine OS name and store it in "osName" variable
-osName=`cat /etc/*os-release | grep ^NAME | cut -d '"' -f 2`
+osName=$( cat /etc/*os-release | grep ^NAME | cut -d '"' -f 2 );
 
 # Checking if running as root. If yes, asking to change to a non-root user.
 # This verifies that a non-root user is configured and is being used to run
@@ -43,7 +43,7 @@ fi
 
 if [ "$osName" == "Ubuntu" ]
 then
-  echo "${green}  You're running "$osName" Linux. "$osName" security
+  echo "${green}  You're running $osName Linux. $osName security
   first measures will be applied.
 
   You will be prompted for your sudo password.
@@ -60,7 +60,7 @@ then
   ${normal}"
     # Checking whether an authorized_keys file exists in logged in user's account.
     # If so, the assumption is that key based authentication is set up.
-    if [ -f /home/$USER/.ssh/authorized_keys ]
+    if [ -f /home/"$USER"/.ssh/authorized_keys ]
     then
       echo "${yellow}  
       Locking down SSH so it will only permit key-based authentication.
@@ -69,7 +69,7 @@ then
       Are you sure you want to allow only key-based authentication for SSH? 
       PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
       (y or n):${normal} " 
-      read answer
+      read -r answer
       # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
       if [ "$answer" == "y" ] ;then
         echo "${yellow}
@@ -153,7 +153,7 @@ Description of what was done:
 1. Ensured a non-root user is set up.
 2. Ensured non-root user also has sudo permission (script won't continue without it).
 3. Ensured SSH is allowed and ufw firewall is enabled.
-4. Locked down SSH so it only allows key-based authentication if you chose "y" for that step.
+4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
 5. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
@@ -165,7 +165,7 @@ ${normal}"
 elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ]
 then
 
-  echo "${green}  You're running "$osName". "$osName" security first 
+  echo "${green}  You're running $osName. $osName security first 
   measures will be applied.
 
   You will be prompted for your sudo password.
