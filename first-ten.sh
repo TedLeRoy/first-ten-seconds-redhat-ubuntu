@@ -9,6 +9,8 @@
 # https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/
 # Also by Bryan Kennedy's post:
 # https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+# This script has been verified by shellcheck. Thanks koalaman!
+# https://github.com/koalaman/shellcheck
 
 # Defining Colors for text output
 red=$( tput setaf 1 );
@@ -50,6 +52,10 @@ then
   Please enter it when asked.
   ${normal}
   "
+  ##############################################
+  #            Ubuntu Firewall Section         #
+  ##############################################
+  
   # Enabling ufw firewall and making sure it allows SSH
   echo "${yellow}  Enabling ufw firewall. Ensuring SSH is allowed.
   ${normal}"
@@ -58,45 +64,50 @@ then
   echo "${green}
   Done configuring ufw firewall.
   ${normal}"
-    # Checking whether an authorized_keys file exists in logged in user's account.
-    # If so, the assumption is that key based authentication is set up.
-    if [ -f /home/"$USER"/.ssh/authorized_keys ]
-    then
-      echo "${yellow}  
-      Locking down SSH so it will only permit key-based authentication.
+
+  ##############################################
+  #              Ubuntu SSH Section            #
+  ##############################################
+
+  # Checking whether an authorized_keys file exists in logged in user's account.
+  # If so, the assumption is that key based authentication is set up.
+  if [ -f /home/"$USER"/.ssh/authorized_keys ]
+  then
+    echo "${yellow}  
+    Locking down SSH so it will only permit key-based authentication.
+    ${normal}"
+    echo -n "${red}  
+    Are you sure you want to allow only key-based authentication for SSH? 
+    PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
+    (y or n):${normal} " 
+    read -r answer
+    # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
+    if [ "$answer" == "y" ] ;then
+      echo "${yellow}
+      Adding the following lines to a file in sshd_config.d
       ${normal}"
-      echo -n "${red}  
-      Are you sure you want to allow only key-based authentication for SSH? 
-      PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
-      (y or n):${normal} " 
-      read -r answer
-      # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
-      if [ "$answer" == "y" ] ;then
-        echo "${yellow}
-        Adding the following lines to a file in sshd_config.d
-        ${normal}"
-        echo "DebianBanner no
+      echo "DebianBanner no
 DisableForwarding yes
 PermitRootLogin no
 IgnoreRhosts yes
 PasswordAuthentication no
 PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.conf 
-        echo "${yellow}
-        Reloading ssh
-        ${normal}"
-	# Restarting ssh daemon
-        sudo systemctl reload ssh
-        echo "${green}
-        ssh has been restarted.
-        ${normal}"
+      echo "${yellow}
+      Reloading ssh
+      ${normal}"
+      # Restarting ssh daemon
+      sudo systemctl reload ssh
+      echo "${green}
+      ssh has been restarted.
+      ${normal}"
 
-      else
-	# User chose a key other than "y" for configuring ssh so it will not be set up now
-        echo "${red}
-        You have chosen not to disable password based authentication at this time.
-        Please do so yourself or re-run this script when you're prepared to do so.
-        ${normal}"
-      fi
+    else
+      # User chose a key other than "y" for configuring ssh so it will not be set up now
+      echo "${red}
+      You have chosen not to disable password based authentication at this time.
+      Please do so yourself or re-run this script when you're prepared to do so.
+      ${normal}"
+    fi
 
   else
     # The check for an authorized_keys file failed so it is assumed key based auth is not set up
@@ -105,6 +116,11 @@ PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.con
     It looks like SSH is not configured to allow key based authentication.
     Please enable it and re-run this script.${normal}"
   fi
+
+  ##############################################
+  #          Ubuntu fail2ban Section           #
+  ##############################################
+
   # Installing fail2ban and networking tools (includes netstat)
   echo "${yellow}
   Installing fail2ban and networking tools.
@@ -147,12 +163,17 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   bantime: 24 hours (86400 seconds)
   ${normal}"
 
+  ##############################################
+  #           Ubuntu Overview Section          #
+  ##############################################
+
 #Explain what was done
 echo "${green}
 Description of what was done:
 1. Ensured a non-root user is set up.
 2. Ensured non-root user also has sudo permission (script won't continue without it).
-3. Ensured SSH is allowed and ufw firewall is enabled.
+3. Ensured SSH is allowed.
+4. Ensured ufw firewall is enabled.
 4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
 5. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
@@ -172,16 +193,127 @@ then
   Please enter it when asked.
   ${normal}
   "
+  ##############################################
+  #            CentOS Firewall Section         #
+  ##############################################
+
+  # Enabling firewalld firewall and making sure it allows SSH
+  echo "${yellow}  Enabling firewalld firewall. Ensuring SSH is allowed.
+  ${normal}"
+
+  echo "${yellow}  Configuring firewalld to disallow Zone Drifting
+  ${normal}"
+  sudo sed -i.bak 's/#\?\(AllowZoneDrifting\s*\).*$/\1=no/' /etc/firewalld/firewalld.conf
+
+  OUTPUT=$(sudo firewall-cmd --permanent --list-all | grep services)
+  if echo "$OUTPUT" | grep -q "ssh"; then
+    echo "${green}
+    firewalld is already configured to allow SSH
+    ${normal}"
+    echo "${yellow}
+    Ensuring firewalld is running
+    ${normal}"
+    sudo systemctl start firewalld
+    echo "${green}
+    Done configuring firewalld
+    ${normal}"
+  else
+    echo "${yellow}
+    Adding SSH to allowed protocols in firewalld
+    ${normal}"
+    sudo firewall-cmd --permanent --add-service=ssh
+    echo "${yellow}
+    Restarting firewalld
+    ${normal}"
+    sudo systemctl restart firewalld
+    echo "${green}
+    Done configuring firewalld
+    ${normal}"
+  fi
+
+  ##############################################
+  #              CentOS SSH Section            #
+  ##############################################
+
+  # Checking whether an authorized_keys file exists in logged in user's account.
+  # If so, the assumption is that key based authentication is set up.
+  if [ -f /home/"$USER"/.ssh/authorized_keys ]
+  then
+    echo "${yellow}
+    Locking down SSH so it will only permit key-based authentication.
+    ${normal}"
+    echo -n "${red}
+    Are you sure you want to allow only key-based authentication for SSH?
+    PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
+    (y or n):${normal} "
+    read -r answer
+    # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
+    if [ "$answer" == "y" ] ;then
+      echo "${yellow}
+      Adding the following lines to a file in sshd_config.d
+      ${normal}"
+      echo "DebianBanner no
+DisableForwarding yes
+PermitRootLogin no
+IgnoreRhosts yes
+PasswordAuthentication no
+PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.conf
+      echo "${yellow}
+      Reloading ssh
+      ${normal}"
+      # Restarting ssh daemon
+      sudo systemctl reload ssh
+      echo "${green}
+      ssh has been restarted.
+      ${normal}"
+
+    else
+      # User chose a key other than "y" for configuring ssh so it will not be set up now
+      echo "${red}
+      You have chosen not to disable password based authentication at this time.
+      Please do so yourself or re-run this script when you're prepared to do so.
+      ${normal}"
+    fi
+
+  else
+    # The check for an authorized_keys file failed so it is assumed key based auth is not set up
+    # Skipping this configuration and warning user to do it for herself
+    echo "${red}
+    It looks like SSH is not configured to allow key based authentication.
+    Please enable it and re-run this script.${normal}"
+  fi
+
+  ##############################################
+  #          CentOS fail2ban Section           #
+  ##############################################
+
+
+
+  ##############################################
+  #           CentOS Overview Section          #
+  ##############################################
+
+#Explain what was done
+echo "${green}
+Description of what was done:
+1. Ensured a non-root user is set up.
+2. Ensured non-root user also has sudo permission (script won't continue without it).
+3. Ensured SSH is allowed.
+4. Ensured ufw firewall is enabled.
+4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
+5. Installed fail2ban and configured it to protect SSH.
+[note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
+${normal}"
 
 ####################################################
 #  If Neither CentOS / Red Hat or Ubuntu is found  #
 ####################################################
 
 else
-	echo "${red}
-	I'm not sure what operating system you're running.
-	This script has only been tested for CentOS / Red Hat 
-	and Ubuntu.
-	Please run it only on those operating systems.
-	${normal}"
+  echo "${red}
+  I'm not sure what operating system you're running.
+  This script has only been tested for CentOS / Red Hat 
+  and Ubuntu.
+  Please run it only on those operating systems.
+  ${normal}"
 fi
