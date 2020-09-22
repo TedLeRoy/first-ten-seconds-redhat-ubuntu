@@ -49,5 +49,5 @@ You could use the following commands (you may have to install wget first if you 
 ```
 wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh
 cmhod +x first-ten.sh
-./firs-ten.sh
+./first-ten.sh
 ```
