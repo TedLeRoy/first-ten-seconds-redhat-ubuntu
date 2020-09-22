@@ -1,6 +1,6 @@
 # first-ten-seconds-centos-ubuntu
 
-A bash script to help secure a new CentOS or Ubuntu server quickly and easily.
+A bash script to help secure a new CentOS 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
 
 ### Background
 
