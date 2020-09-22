@@ -12,6 +12,14 @@ The script will determine if it's being run on a CentOS, Red Hat, or Ubuntu serv
 
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
+The following tutorials can help you set up key based authentication:
+
+My YouTube series, part 1 through 7 for key based authentication on Ubuntu: https://www.youtube.com/watch?v=ugpAr5fhA1s&t=16s
+
+Digital Ocean CentOS 8 Key Based Authentication tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-centos-8
+
+Digital Ocean Ubuntu 20.04 Key Based Authentication tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04
+
 This script is being created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
 
 ### [Project Goals](#project-goals)
