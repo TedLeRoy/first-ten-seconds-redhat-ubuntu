@@ -43,3 +43,10 @@ The latest version of this script can be run with the following single line at t
 Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link below.
 
 `https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh`
+
+You could use the following commands (you may have to install wget first if you did a minimal install):
+
+`wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh
+cmhod +x first-ten.sh
+./firs-ten.sh
+`
