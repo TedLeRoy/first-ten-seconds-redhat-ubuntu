@@ -46,7 +46,8 @@ Alternatively, you can clone the full repository locally or just copy and run th
 
 You could use the following commands (you may have to install wget first if you did a minimal install):
 
-`wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh
+```
+wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh
 cmhod +x first-ten.sh
 ./firs-ten.sh
-`
+```
