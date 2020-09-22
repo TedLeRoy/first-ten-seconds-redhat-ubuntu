@@ -36,8 +36,8 @@ Any time the creator of a script says it has to be run with sudo permissions or 
 
 ### Usage
 
-The latest version of this script can be run with the following single line at the Linux terminal:
+The latest version of this script can be run with the following single line at the Linux terminal on any CentOS 8, Red Hat 8, or Ubuntu 20.04 new installation after a non-root user with sudo privileges has been set up and key based authentication for that user using SSH configured:
 
 `bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)`
 
-Alternatively, you can copy the full repository locally or just copy and run the first-ten.sh script from the link above.
+Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link above.
