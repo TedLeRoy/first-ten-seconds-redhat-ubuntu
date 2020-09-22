@@ -10,8 +10,6 @@ Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-fi
 
 The script will determine if it's being run on a CentOS, Red Hat, or Ubuntu server and to run commands appropriate for the OS.
 
-This repo will perform several functions recommended for a new server and will do so for either CentOS or Ubuntu.
-
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
 This script is being created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
