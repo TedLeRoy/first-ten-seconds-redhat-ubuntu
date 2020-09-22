@@ -26,6 +26,28 @@ This script is being created in support of my Linux Security course to give stud
 
 This project seeks to roll a few common security best practices for new servers into a script that will determine whether it's being run on CentOS or Ubuntu and will run the commands appropriate for the OS it's being run on.
 
+### What It Does
+
+This script will do the following for Ubuntu:
+
+1. Ensure a non-root user is set up.
+2. Ensure non-root user also has sudo permission (script won't continue without it).
+3. Ensure SSH is allowed through the ufw firewall.
+4. Ensure ufw firewall is enabled.
+5. Lock down SSH so it only allows key-based authentication if you chose y for that step.
+6. Install fail2ban and configured it to protect SSH.
+[note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
+
+The script will do the following for CentOS:
+
+1. Ensure a non-root user is set up.
+2. Ensure non-root user also has sudo permission (script won't continue without it).
+3. Ensure SSH is allowed through the firewalld firewall.
+4. Ensure firewalld firewall is enabled.
+5. Lock down SSH so it only allows key-based authentication if you chose y for that step.
+6. Install fail2ban and configured it to protect SSH.
+7. Ensure automatic security updates are configured.
+
 ### Prerequisites
 
 You must have sudo permissions to run the commands inside the script.
