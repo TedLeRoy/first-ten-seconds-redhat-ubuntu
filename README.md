@@ -40,4 +40,6 @@ The latest version of this script can be run with the following single line at t
 
 `bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)`
 
-Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link above.
+Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link below.
+
+`https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh`
