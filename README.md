@@ -8,7 +8,7 @@ This doesn't "lock down" your server completely, but improves the security postu
 
 Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, DigitalOcean guides, CentOS, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
 
-The script will determine if it's being run on a CentOS, Red Hat, or Ubuntu server and to run commands appropriate for the OS.
+The script will determine if it's being run on a CentOS, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
 
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
