@@ -2,7 +2,7 @@
 
 A simple bash script to help secure a new CentOS or Ubuntu server quickly and easily.
 
-Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/
+Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, DigitalOcean guides, and things I like to do myself for new servers.
 
 Modified to determine if it's being run on a CentOS or Ubuntu server and to run commands appropriate for the OS.
 
@@ -36,3 +36,10 @@ Any time the creator of a script says it has to be run with sudo permissions or 
 
 ***This script has to be run with sudo because the apt and firewall commands it uses must be run as root.***
 
+### Usage
+
+The latest version of this script can be run with the following single line at the Linux terminal:
+
+bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)
+
+Alternatively, you can copy the full repository locally or just copy and run the first-ten.sh script from the link above.
