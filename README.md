@@ -35,8 +35,8 @@ This script will do the following for Ubuntu:
 3. Ensure SSH is allowed through the ufw firewall.
 4. Ensure ufw firewall is enabled.
 5. Lock down SSH so it only allows key-based authentication if you chose y for that step.
-6. Install fail2ban and configured it to protect SSH.
-[note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
+6. Install fail2ban and configured it to protect SSH. 
+(note) For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 
 The script will do the following for CentOS:
 
