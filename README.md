@@ -38,6 +38,6 @@ Any time the creator of a script says it has to be run with sudo permissions or 
 
 The latest version of this script can be run with the following single line at the Linux terminal:
 
-bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)
+`bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)`
 
 Alternatively, you can copy the full repository locally or just copy and run the first-ten.sh script from the link above.
