@@ -41,7 +41,6 @@ This script will do the following for Ubuntu:
    1. Disable root login over SSH
    1. Ignore rhosts
    1. Disable password authentication
-   1. Explicitly disable empty passwords
    
 6. Install fail2ban and configured it to protect SSH. 
 (note) For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
@@ -55,11 +54,10 @@ The script will do the following for CentOS:
 5. Locked down SSH if you choose y for that step.
 
    1. Set SSH not to display banner
-   1 Disable all forwarding
+   1. Disable all forwarding
    1. Disable root login over SSH
    1. Ignore rhosts
    1. Disable password authentication
-   1. Explicitly disable empty passwords
 
 6. Install fail2ban and configured it to protect SSH.
 7. Ensure automatic security updates are configured.
@@ -78,7 +76,7 @@ You can read the man page for each command and option to see what it does.
 
 Any time the creator of a script says it has to be run with sudo permissions or as root, understand why and use caution.
 
-***This script has to be run with sudo because the system update, firewall, and ssh related commands it uses must be run as root.***
+***This script has to be run by a user with sudo permissions because the system update, firewall, and ssh related commands it uses must be run as root. It should be run by a non-root user but credentials should be provided when prompted.***
 
 ### Usage
 

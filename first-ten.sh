@@ -82,7 +82,7 @@ then
     (y or n):${normal} " 
     read -r answer
     # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
-    if [ "$answer" == "y" ] ;then
+    if [ "$answer" == "y" ] || [ "$answer" == "Y" ] ;then
       echo "${yellow}
       Adding the following lines to a file in sshd_config.d
       ${normal}"
@@ -90,8 +90,7 @@ then
 DisableForwarding yes
 PermitRootLogin no
 IgnoreRhosts yes
-PasswordAuthentication no
-PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.conf 
+PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.conf 
       echo "${yellow}
       Reloading ssh
       ${normal}"
@@ -183,7 +182,6 @@ Description of what was done:
    c. Disabled root login over SSH
    d. Ignoring rhosts
    e. Disabled password authentication
-   f. Explicitly disabled empty passwords
 6. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
@@ -257,21 +255,24 @@ then
     (y or n):${normal} "
     read -r answer
     # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
-    if [ "$answer" == "y" ] ;then
+    if [ "$answer" == "y" ] || [ "$answer" == "Y" ] ;then
       echo "${yellow}
-      Adding the following lines to a file in sshd_config.d
+      Making modifications to /etc/ssh/sshd_config.
       ${normal}"
-      echo "DebianBanner no
-DisableForwarding yes
-PermitRootLogin no
-IgnoreRhosts yes
-PasswordAuthentication no
-PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.conf
+      # Making backup copy 1 of sshd_config
+      sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.0
+      echo "# Disabling all forwarding.
+# [note] This setting overrides all other forwarding settings!
+# This entry was added by first-ten.sh
+DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
+      sudo sed -i.bak -e 's/#IgnoreRhosts/IgnoreRhosts/' -e 's/IgnoreRhosts\s\no/IgnoreRhosts\s\yes/' /etc/ssh/sshd_config
+      sudo sed -i.bak1 '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
+      sudo sed -i.bak2 '/^PasswordAuthentication/s/yes/no/' /etc/ssh/sshd_config
       echo "${yellow}
       Reloading ssh
       ${normal}"
       # Restarting ssh daemon
-      sudo systemctl reload ssh
+      sudo systemctl reload sshd
       echo "${green}
       ssh has been restarted.
       ${normal}"
@@ -279,7 +280,8 @@ PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.con
     else
       # User chose a key other than "y" for configuring ssh so it will not be set up now
       echo "${red}
-      You have chosen not to disable password based authentication at this time.
+      You have chosen not to disable password based authentication at this time and
+      not to apply the other SSH hardening steps.
       Please do so yourself or re-run this script when you're prepared to do so.
       ${normal}"
     fi
@@ -296,7 +298,82 @@ PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.con
   #          CentOS fail2ban Section           #
   ##############################################
 
+  # Installing fail2ban and networking tools (includes netstat)
+  echo "${yellow}
+    Installing fail2ban.
+    ${normal}"
+    sudo dnf install fail2ban -y
+      echo "${green}
+      fail2ban has been installed.
+      ${normal}"
+      # Setting up the fail2ban jail for SSH
+      echo "${yellow}
+      Configuring fail2ban to protect SSH.
+      Entering the following into /etc/fail2ban/jail.local
+      ${normal}"
+      echo "# Default banning action (e.g. iptables, iptables-new,
+# iptables-multiport, shorewall, etc) It is used to define
+# action_* variables. Can be overridden globally or per
+# section within jail.local file
 
+[ssh]
+
+enabled  = true
+banaction = iptables-multiport
+port     = ssh
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = 5
+findtime = 43200
+bantime = 86400" | sudo tee /etc/fail2ban/jail.local
+      # Restarting fail2ban
+      echo "${green}
+      Restarting fail2ban
+      ${normal}"
+      sudo systemctl restart fail2ban
+      echo "${green}
+      fail2ban restarted
+      ${normal}"
+      # Tell the user what the fail2ban protections are set to
+      echo "${green}
+      fail2ban is now protecting SSH with the following settings:
+      maxretry: 5
+      findtime: 12 hours (43200 seconds)
+      bantime: 24 hours (86400 seconds)
+      ${normal}"
+
+  ##############################################
+  #            CentOS Updates Section          #
+  ##############################################
+
+  # Configuring automatic updates for CentOS / Red Hat
+  echo "${yellow}
+  Running system update and upgrade.
+  ${normal}"
+  sudo dnf upgrade
+  echo "${green}
+  Upgrade complete.
+  ${normal}"
+  echo "${yellow}
+  Installing Auto-upgrade (dnf-automatic)
+  ${normal}"
+  sudo dnf install dnf-automatic -y
+  echo "${green}
+  dnf-automatic installed.
+  ${normal}"
+  echo "${yellow}
+  Enabling automatic updates (dnf-automatic.timer)
+  ${normal}"
+  sudo systemctl enable --now dnf-automatic.timer
+  echo "${green}
+  Automatic updates enabled.
+  ${normal}"
+  echo "${green}
+  You can check timer by running:
+  sudo systemctl status dnf-automatic.timer
+  Look for \"loaded\" under the Loaded: line
+  and \"active\" under the Active: line.
+  ${normal}"
 
   ##############################################
   #           CentOS Overview Section          #
@@ -310,12 +387,10 @@ Description of what was done:
 3. Ensured SSH is allowed.
 4. Ensured firewlld firewall is enabled.
 5. Locked down SSH if you chose y for that step.
-   a. Set SSH not to display banner
-   b. Disabled all forwarding
-   c. Disabled root login over SSH
-   d. Ignoring rhosts
-   e. Disabled password authentication
-   f. Explicitly disabled empty passwords
+   a. Disabled all forwarding
+   b. Disabled root login over SSH
+   c. Ignoring rhosts
+   d. Disabled password authentication
 6. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
