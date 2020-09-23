@@ -299,9 +299,15 @@ Description of what was done:
 1. Ensured a non-root user is set up.
 2. Ensured non-root user also has sudo permission (script won't continue without it).
 3. Ensured SSH is allowed.
-4. Ensured ufw firewall is enabled.
-4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
-5. Installed fail2ban and configured it to protect SSH.
+4. Ensured firewlld firewall is enabled.
+5. Locked down SSH if you chose y for that step.
+   a. Set SSH not to display banner
+   b. Disabled all forwarding
+   c. Disabled root login over SSH
+   d. Ignoring rhosts
+   e. Disabled password authentication
+   f. Explicitly disabled empty passwords
+6. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
 
