@@ -34,7 +34,13 @@ This script will do the following for Ubuntu:
 2. Ensure non-root user also has sudo permission (script won't continue without it).
 3. Ensure SSH is allowed through the ufw firewall.
 4. Ensure ufw firewall is enabled.
-5. Lock down SSH so it only allows key-based authentication if you chose y for that step.
+5. Lock down SSH if you choose y for that step.
+   a. Set SSH not to display banner
+   b. Disable all forwarding
+   c. Disable root login over SSH
+   d. Ignore rhosts
+   e. Disable password authentication
+   f. Explicitly disable empty passwords
 6. Install fail2ban and configured it to protect SSH. 
 (note) For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 
@@ -44,7 +50,13 @@ The script will do the following for CentOS:
 2. Ensure non-root user also has sudo permission (script won't continue without it).
 3. Ensure SSH is allowed through the firewalld firewall.
 4. Ensure firewalld firewall is enabled.
-5. Lock down SSH so it only allows key-based authentication if you chose y for that step.
+5. Locked down SSH if you choose y for that step.
+   a. Set SSH not to display banner
+   b. Disable all forwarding
+   c. Disable root login over SSH
+   d. Ignore rhosts
+   e. Disable password authentication
+   f. Explicitly disable empty passwords
 6. Install fail2ban and configured it to protect SSH.
 7. Ensure automatic security updates are configured.
 
