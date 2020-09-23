@@ -261,7 +261,8 @@ then
       ${normal}"
       # Making backup copy 1 of sshd_config
       sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.0
-      echo "# Disabling all forwarding.
+      echo "
+# Disabling all forwarding.
 # [note] This setting overrides all other forwarding settings!
 # This entry was added by first-ten.sh
 DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
