@@ -155,7 +155,10 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   Restarting fail2ban
   ${normal}"
   sudo systemctl restart fail2ban
-  # Tell the user what the protections are set to
+  echo "${green}
+  fail2ban restarted
+  ${normal}"
+  # Tell the user what the fail2ban protections are set to
   echo "${green}
   fail2ban is now protecting SSH with the following settings:
   maxretry: 5
@@ -174,8 +177,8 @@ Description of what was done:
 2. Ensured non-root user also has sudo permission (script won't continue without it).
 3. Ensured SSH is allowed.
 4. Ensured ufw firewall is enabled.
-4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
-5. Installed fail2ban and configured it to protect SSH.
+5. Locked down SSH so it only allows key-based authentication if you chose y for that step.
+6. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
 
@@ -203,7 +206,7 @@ then
 
   echo "${yellow}  Configuring firewalld to disallow Zone Drifting
   ${normal}"
-  sudo sed -i.bak 's/#\?\(AllowZoneDrifting\s*\).*$/\1=no/' /etc/firewalld/firewalld.conf
+  sudo sed -i.bak 's/#\?\(AllowZoneDrifting*\).*$/\1=no/' /etc/firewalld/firewalld.conf
 
   OUTPUT=$(sudo firewall-cmd --permanent --list-all | grep services)
   if echo "$OUTPUT" | grep -q "ssh"; then
@@ -300,8 +303,8 @@ Description of what was done:
 2. Ensured non-root user also has sudo permission (script won't continue without it).
 3. Ensured SSH is allowed.
 4. Ensured ufw firewall is enabled.
-4. Locked down SSH so it only allows key-based authentication if you chose y for that step.
-5. Installed fail2ban and configured it to protect SSH.
+5. Locked down SSH so it only allows key-based authentication if you chose y for that step.
+6. Installed fail2ban and configured it to protect SSH.
 [note] For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 ${normal}"
 
