@@ -78,7 +78,7 @@ then
     ${normal}"
     echo -n "${red}  
     Are you sure you want to allow only key-based authentication for SSH? 
-    PASSWORD AUTHENTICATIN WILL BE DISABLED FOR SSH ACCESS!
+    PASSWORD AUTHENTICATION WILL BE DISABLED FOR SSH ACCESS!
     (y or n):${normal} " 
     read -r answer
     # Putting relevant lines in /etc/ssh/sshd_config.d/11-sshd-first-ten.conf file
