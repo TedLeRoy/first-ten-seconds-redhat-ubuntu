@@ -100,4 +100,4 @@ cmhod +x first-ten.sh
 
 You can also follow the traditional method for GitHub projects and create your own clone then run from that.
 
-`https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu.git`
+`git clone https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu.git`
