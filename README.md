@@ -1,3 +1,5 @@
+![First-ten-post-run](https://i.ibb.co/4N5QXww/After-Running-Script.png)
+
 # first-ten-seconds-centos-ubuntu
 
 A bash script to help secure a new CentOS 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
@@ -95,3 +97,7 @@ wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/
 cmhod +x first-ten.sh
 ./first-ten.sh
 ```
+
+You can also follow the traditional method for GitHub projects and create your own clone then run from that.
+
+`https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu.git`
