@@ -105,3 +105,7 @@ git clone https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu.git
 cd first-ten-seconds-centos-ubuntu
 ./first-ten.sh
 ```
+
+### Issues, Feature Requests, Input
+
+Please report issues, request features, or provide your input or feedback about the script [here](https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu/issues).
