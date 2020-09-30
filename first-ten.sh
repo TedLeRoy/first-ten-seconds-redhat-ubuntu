@@ -34,6 +34,8 @@ then
   Please do not start the script using sudo, but
   enter sudo privileges when prompted.
   ${normal}"
+  #Pause so user can see output
+  pause 1
   exit
 fi
 
@@ -64,6 +66,8 @@ then
   echo "${green}
   Done configuring ufw firewall.
   ${normal}"
+  #Pausing so user can see output
+  pause 1
 
   ##############################################
   #              Ubuntu SSH Section            #
@@ -98,6 +102,8 @@ PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.c
       sudo systemctl reload ssh
       echo "${green}
       ssh has been restarted.
+      # Pause so user can see output
+      pause 1
       ${normal}"
 
     else
@@ -106,6 +112,8 @@ PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/11-sshd-first-ten.c
       You have chosen not to disable password based authentication at this time.
       Please do so yourself or re-run this script when you're prepared to do so.
       ${normal}"
+      # Pausing so user can see output
+      pause 1
     fi
 
   else
@@ -164,6 +172,8 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   findtime: 12 hours (43200 seconds)
   bantime: 24 hours (86400 seconds)
   ${normal}"
+  # Pausing so user can see output
+  pause 1
 
   ##############################################
   #           Ubuntu Overview Section          #
@@ -199,6 +209,8 @@ then
   You will be prompted for your sudo password.
   Please enter it when asked.
   ${normal}
+  #Pause so user can see output
+  pause 1
   "
   ##############################################
   #            CentOS Firewall Section         #
@@ -224,6 +236,8 @@ then
     echo "${green}
     Done configuring firewalld
     ${normal}"
+    #Pause so user can see output
+    pause 1
   else
     echo "${yellow}
     Adding SSH to allowed protocols in firewalld
@@ -236,6 +250,8 @@ then
     echo "${green}
     Done configuring firewalld
     ${normal}"
+    #Pause so user can see output
+    pause 1
   fi
 
   ##############################################
@@ -277,7 +293,8 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
       echo "${green}
       ssh has been restarted.
       ${normal}"
-
+      #Pause so user can see output
+      pause 1
     else
       # User chose a key other than "y" for configuring ssh so it will not be set up now
       echo "${red}
@@ -285,7 +302,9 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
       not to apply the other SSH hardening steps.
       Please do so yourself or re-run this script when you're prepared to do so.
       ${normal}"
-    fi
+      #Pause so user can see output
+      pause 1
+  fi
 
   else
     # The check for an authorized_keys file failed so it is assumed key based auth is not set up
@@ -293,6 +312,8 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
     echo "${red}
     It looks like SSH is not configured to allow key based authentication.
     Please enable it and re-run this script.${normal}"
+    #Pause so user can see output
+    pause 1
   fi
 
   ##############################################
@@ -342,6 +363,8 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
       findtime: 12 hours (43200 seconds)
       bantime: 24 hours (86400 seconds)
       ${normal}"
+      #Pause so user can see output
+      pause 1
 
   ##############################################
   #            CentOS Updates Section          #
@@ -375,6 +398,9 @@ bantime = 86400" | sudo tee /etc/fail2ban/jail.local
   Look for \"loaded\" under the Loaded: line
   and \"active\" under the Active: line.
   ${normal}"
+  #Pause so user can see output
+  pause 1
+
 
   ##############################################
   #           CentOS Overview Section          #
