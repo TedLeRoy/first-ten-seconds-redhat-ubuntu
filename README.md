@@ -26,7 +26,7 @@ This script is being created in support of my Linux Security course to give stud
 
 ### [Project Goals](#project-goals)
 
-This project seeks to roll a few common security best practices for new servers into a script that will determine whether it's being run on CentOS or Ubuntu and will run the commands appropriate for the OS it's being run on.
+This project seeks to roll a few common security best practices for new servers into a script that will determine whether it's being run on CentOS or Ubuntu and will run the security related commands appropriate for the OS it's being run on.
 
 ### What It Does
 
@@ -78,7 +78,7 @@ You can read the man page for each command and option to see what it does.
 
 Any time the creator of a script says it has to be run with sudo permissions or as root, understand why and use caution.
 
-***This script has to be run by a user with sudo permissions because the system update, firewall, and ssh related commands it uses must be run as root. It should be run by a non-root user but credentials should be provided when prompted.***
+***This script has to be run by a user with sudo permissions because the system update, firewall, and ssh related commands it uses must be run as root. It should be run by a non-root user but sudo credentials should be provided when prompted.***
 
 ### Usage
 
