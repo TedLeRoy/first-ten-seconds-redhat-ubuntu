@@ -209,10 +209,10 @@ then
 
   You will be prompted for your sudo password.
   Please enter it when asked.
-  ${normal}
+  ${normal}"
   #Pause so user can see output
   sleep 1
-  "
+  
   ##############################################
   #            CentOS Firewall Section         #
   ##############################################
