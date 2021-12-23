@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # bash script to set minimal security on new installations of Ubuntu
-# and CentOS Linux. Written using Ubuntu 20.04 and CentOS 8.
+# Rocky Linux and CentOS Linux. Written using Ubuntu 20.04 and Rocky 
+# Linux 8 and CentOS 8.
 # Written by Ted LeRoy with help from Google and the Linux community
 # Follow or contribute on GitHub here:
 # https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu
@@ -200,7 +201,7 @@ ${normal}"
 #          CentOS / Red Hat Section             #
 #################################################
 
-elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ]
+elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ] || [ "$osName" == "Rocky Linux" ]
 then
 
   echo "${green}  You're running $osName. $osName security first 
