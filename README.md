@@ -2,15 +2,15 @@
 
 # first-ten-seconds-centos-ubuntu
 
-A bash script to help secure a new CentOS 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
+A bash script to help perform initial security hardening steps on a new Rocky Linux 8, CentOS 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
 
 ### Background
 
-This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 8, CentOS 8 or Ubuntu 20.04 server so you can take more time with further improvements if you need to.
+This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 8, Rocky Linux 8, CentOS 8 or Ubuntu 20.04 server so you can take more time with further improvements if you need to.
 
 Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, and DigitalOcean guides, CentOS, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
 
-The script will determine if it's being run on a CentOS, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
+The script will determine if it's being run on a Rocky Linux, CentOS, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
 
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
