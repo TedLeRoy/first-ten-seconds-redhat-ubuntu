@@ -301,7 +301,7 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
       echo "${red}
       You have chosen not to disable password based authentication at this time and
       not to apply the other SSH hardening steps.
-      Please do so yourself or re-run this script when you're prepared to do so.
+      Please do so yourself or re-run this script when you\'re prepared to do so.
       ${normal}"
       #Pause so user can see output
       sleep 1
@@ -431,7 +431,7 @@ else
   echo "${red}
   I'm not sure what operating system you're running.
   This script has only been tested for CentOS / Red Hat 
-  and Ubuntu.
+  Rocky Linux, and Ubuntu.
   Please run it only on those operating systems.
   ${normal}"
 fi
