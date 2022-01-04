@@ -1,16 +1,18 @@
 ![First-ten-post-run](https://i.ibb.co/4N5QXww/After-Running-Script.png)
 
-# first-ten-seconds-centos-ubuntu
+# first-ten-seconds-redhat-ubuntu
 
-A bash script to help perform initial security hardening steps on a new Rocky Linux 8, CentOS 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
+A bash script to help perform initial security hardening steps on a new Rocky Linux 8, Alma Linux 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
 
 ### Background
 
-This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 8, Rocky Linux 8, CentOS 8 or Ubuntu 20.04 server so you can take more time with further improvements if you need to.
+Note: I changed the name of this project from first-ten-seconds-centos-ubuntu to first-ten-seconds-redhat-ubuntu to account for the fundamental changes made by Red Hat and the CentOS project, making it CentOS unsuitable for many uses. I'm shifting to CentOS alternatives like Rocky Linux and Alma Linux. 
 
-Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, and DigitalOcean guides, CentOS, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
+This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 8, Rocky Linux 8, Alma Linux 8 or Ubuntu 20.04 server so you can take more time with further improvements if you need to.
 
-The script will determine if it's being run on a Rocky Linux, CentOS, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
+Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, and DigitalOcean guides, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
+
+The script will determine if it's being run on a Rocky Linux, Alma Linux, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
 
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
@@ -47,7 +49,7 @@ This script will do the following for Ubuntu:
 6. Install fail2ban and configured it to protect SSH. 
 (note) For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
 
-The script will do the following for CentOS:
+The script will do the following for Red Hat and Red Hat based distro's:
 
 1. Ensure a non-root user is set up.
 2. Ensure non-root user also has sudo permission (script won't continue without it).
@@ -82,18 +84,18 @@ Any time the creator of a script says it has to be run with sudo permissions or 
 
 ### Usage
 
-The latest version of this script can be run with the following single line at the Linux terminal on any CentOS 8, Red Hat 8, or Ubuntu 20.04 new installation after a non-root user with sudo privileges has been set up and key based authentication for that user using SSH configured:
+The latest version of this script can be run with the following single line at the Linux terminal on any Rocky Linux 8, Alma Linux 8, Red Hat 8, or Ubuntu 20.04 new installation after a non-root user with sudo privileges has been set up and key based authentication for that user using SSH configured:
 
-`bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh)`
+`bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh)`
 
 Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link below.
 
-`https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh`
+`https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh`
 
 You could use the following commands (you may have to install wget first if you did a minimal install):
 
 ```
-wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-centos-ubuntu/master/first-ten.sh
+wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh
 cmhod +x first-ten.sh
 ./first-ten.sh
 ```
@@ -101,8 +103,8 @@ cmhod +x first-ten.sh
 You can also follow the traditional method for GitHub projects and create your own clone then run from that.
 
 ```
-git clone https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu.git
-cd first-ten-seconds-centos-ubuntu
+git clone https://github.com/TedLeRoy/first-ten-seconds-redhat-ubuntu.git
+cd first-ten-seconds-redhat-ubuntu
 ./first-ten.sh
 ```
 
