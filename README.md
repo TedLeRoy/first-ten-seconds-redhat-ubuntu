@@ -96,7 +96,7 @@ You could use the following commands (you may have to install wget first if you 
 
 ```
 wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh
-cmhod +x first-ten.sh
+chmod +x first-ten.sh
 ./first-ten.sh
 ```
 
