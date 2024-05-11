@@ -13,11 +13,13 @@
 # This script has been verified by shellcheck. Thanks koalaman!
 # https://github.com/koalaman/shellcheck
 
-# Defining Colors for text output
-red=$( tput setaf 1 );
-yellow=$( tput setaf 3 );
-green=$( tput setaf 2 );
-normal=$( tput sgr 0 );
+# Defining Colors for text output if to stdout
+if [[ -t 1 ]]; then
+  red=$( tput setaf 1 );
+  yellow=$( tput setaf 3 );
+  green=$( tput setaf 2 );
+  normal=$( tput sgr 0 );
+fi
 
 # Determine OS name and store it in "osName" variable
 osName=$( cat /etc/*os-release | grep ^NAME | cut -d '"' -f 2 );
