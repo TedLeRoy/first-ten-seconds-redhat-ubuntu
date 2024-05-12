@@ -24,7 +24,7 @@ Digital Ocean CentOS 8 Key Based Authentication tutorial: https://www.digitaloce
 
 Digital Ocean Ubuntu 20.04 Key Based Authentication tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04
 
-This script is being created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
+This script was created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
 
 ### [Project Goals](#project-goals)
 
