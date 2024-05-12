@@ -203,7 +203,7 @@ ${normal}"
 #          CentOS / Red Hat Section             #
 #################################################
 
-elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ] || [ "$osName" == "Rocky Linux" ] || [ "$osName" == "CentOS Stream" ] 
+elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ] || [ "$osName" == "Rocky Linux" ] || [ "$osName" == "CentOS Stream" ] || [ "$osName" == "Alma Linux" ]
 then
 
   echo "${green}  You're running $osName. $osName security first 
