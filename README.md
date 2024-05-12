@@ -2,17 +2,17 @@
 
 # first-ten-seconds-redhat-ubuntu
 
-A bash script to help perform initial security hardening steps on a new Rocky Linux 8, Alma Linux 8, Red Hat 8, or Ubuntu 20.04 server quickly and easily.
+A bash script to help perform initial security hardening steps on a new Rocky Linux 9, AlmaLinux 9, Red Hat 9, or Ubuntu 24.04 server quickly and easily.
 
 ### Background
 
 Note: I changed the name of this project from first-ten-seconds-centos-ubuntu to first-ten-seconds-redhat-ubuntu to account for the fundamental changes made by Red Hat and the CentOS project, making it CentOS unsuitable for many uses. I'm shifting to CentOS alternatives like Rocky Linux and Alma Linux. 
 
-This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 8, Rocky Linux 8, Alma Linux 8 or Ubuntu 20.04 server so you can take more time with further improvements if you need to.
+This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 9, Rocky Linux 9, AlmaLinux 9 or Ubuntu 24.04 server so you can take more time with further improvements if you need to, or be up and running quickly if this provides what you need.
 
 Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, and DigitalOcean guides, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
 
-The script will determine if it's being run on a Rocky Linux, Alma Linux, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
+The script will determine if it's being run on a Rocky Linux, AlmaLinux, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
 
 It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
 
@@ -71,6 +71,8 @@ The script will do the following for Red Hat and Red Hat based distro's:
 You must have sudo permissions to run the commands inside the script.
 
 The script should not be run as root, but the user running it will be prompted for sudo credentials once it runs. sudo password should be entered to continue.
+
+The script will provide the greatest benefit if key-based SSH authentication is set up and tested prior to running.
 
 ### Warning
 
