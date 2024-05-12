@@ -206,6 +206,10 @@ ${normal}"
 elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux" ] || [ "$osName" == "Rocky Linux" ] || [ "$osName" == "CentOS Stream" ] || [ "$osName" == "AlmaLinux" ]
 then
 
+  # Determine wheter Extra Packages for Enterprise Linux (epel) repo is supported.
+  # Needed for fail2ban installation later.
+  epelStat=$( dnf list installed | grep epel-release | cut -d "." -f1 )
+
   echo "${green}  You're running $osName. $osName security first 
   measures will be applied.
 
@@ -322,6 +326,12 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   ##############################################
   #          CentOS fail2ban Section           #
   ##############################################
+
+  # If epel not supported add it before installing fail2ban
+  if [ epelStat!="epel-release" ]
+    echo "Installing epel-release repository to support fail2ban installation"
+    echo sudo dnf install epel-release -y
+  fi
 
   # Installing fail2ban and networking tools (includes netstat)
   echo "${yellow}
