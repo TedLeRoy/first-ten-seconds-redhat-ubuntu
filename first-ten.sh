@@ -8,8 +8,7 @@
 # https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu
 # Inspired by Jerry Gamblin's post:
 # https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/
-# Also by Bryan Kennedy's post:
-# https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+# Also by Bryan Kennedy's post which no longer seems to be available
 # This script has been verified by shellcheck. Thanks koalaman!
 # https://github.com/koalaman/shellcheck
 
@@ -328,7 +327,7 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   ##############################################
 
   # If epel not supported add it before installing fail2ban
-  if [ "$epelStat"!="epel-release" ]
+  if [ "$epelStat" != "epel-release" ]
     then
     echo "Installing epel-release repository to support fail2ban installation"
     echo sudo dnf install epel-release -y
