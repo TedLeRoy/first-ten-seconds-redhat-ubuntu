@@ -330,7 +330,8 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   if [ "$epelStat" != "epel-release" ]
     then
     echo "Installing epel-release repository to support fail2ban installation"
-    echo sudo dnf install epel-release -y
+    sudo dnf install epel-release -y
+    sleep 1
   fi
 
   # Installing fail2ban and networking tools (includes netstat)
