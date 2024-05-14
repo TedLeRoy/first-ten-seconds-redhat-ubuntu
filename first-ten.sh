@@ -25,7 +25,7 @@ osName=$( cat /etc/*os-release | grep ^NAME | cut -d '"' -f 2 );
 # Determine architecture and store in "arch" variable
 arch=$( /bin/arch );
 # Determine major release and store in "release" variable
-release=$( cat /etc/os-release | grep PRETTY_NAME | cut -d " " -f 5 | cut -d "." -f 1 );
+osRelease=$( cat /etc/*os-release | grep PRETTY_NAME | cut -d " " -f 5 | cut -d "." -f 1 );
 
 # Checking if running as root. If yes, asking to change to a non-root user.
 # This verifies that a non-root user is configured and is being used to run
@@ -334,7 +334,7 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   if [ "$epelStat" != "epel-release" ]; then
     if [ "$osName" == "Red Hat Enterprise Linux" ]; then
       echo "Installing epel-release repository to support fail2ban installation for RHEL"
-      sudo subscription-manager repos --enable codeready-builder-for-rhel-"$(release)"-"$(arch)"-rpms
+      sudo "subscription-manager repos --enable codeready-builder-for-rhel-"$(osRelease)"-"$(arch)"-rpms"
       sudo dnf install epel-release epel-next-release
     fi
     echo "Installing epel-release repository to support fail2ban installation $osName"
