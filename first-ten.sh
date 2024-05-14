@@ -22,6 +22,10 @@ fi
 
 # Determine OS name and store it in "osName" variable
 osName=$( cat /etc/*os-release | grep ^NAME | cut -d '"' -f 2 );
+# Determine architecture and store in "arch" variable
+arch=$( /bin/arch );
+# Determine major release and store in "release" variable
+release=$( cat /etc/os-release | grep PRETTY_NAME | cut -d " " -f 5 | cut -d "." -f 1 );
 
 # Checking if running as root. If yes, asking to change to a non-root user.
 # This verifies that a non-root user is configured and is being used to run
@@ -206,7 +210,7 @@ elif [ "$osName" == "CentOS Linux" ] || [ "$osName" == "Red Hat Enterprise Linux
 then
 
   # Determine wheter Extra Packages for Enterprise Linux (epel) repo is supported.
-  # Needed for fail2ban installation later.
+  # epel support is needed for fail2ban installation.
   epelStat=$( dnf list installed | grep epel-release | cut -d "." -f1 )
 
   echo "${green}  You're running $osName. $osName security first 
@@ -327,9 +331,13 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   ##############################################
 
   # If epel not supported add it before installing fail2ban
-  if [ "$epelStat" != "epel-release" ]
-    then
-    echo "Installing epel-release repository to support fail2ban installation"
+  if [ "$epelStat" != "epel-release" ]; then
+    if [ "$osName" == "Red Hat Enterprise Linux" ]; then
+      echo "Installing epel-release repository to support fail2ban installation for RHEL"
+      sudo subscription-manager repos --enable codeready-builder-for-rhel-"$(release)"-"$(arch)"-rpms
+      sudo dnf install epel-release epel-next-release
+    fi
+    echo "Installing epel-release repository to support fail2ban installation $osName"
     sudo dnf install epel-release -y
     sleep 1
   fi
