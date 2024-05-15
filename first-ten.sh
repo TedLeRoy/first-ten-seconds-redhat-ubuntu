@@ -334,7 +334,7 @@ DisableForwarding yes" | sudo tee -a /etc/ssh/sshd_config
   if [ "$epelStat" != "epel-release" ]; then
     if [ "$osName" == "Red Hat Enterprise Linux" ]; then
       echo "Installing epel-release repository to support fail2ban installation for RHEL"
-      sudo "subscription-manager repos --enable codeready-builder-for-rhel-"$( osRelease )"-"$( arch )"-rpms"
+      sudo "subscription-manager repos --enable codeready-builder-for-rhel-"$osRelease"-"$arch"-rpms"
       sudo dnf install epel-release epel-next-release
     fi
     echo "Installing epel-release repository to support fail2ban installation $osName"
