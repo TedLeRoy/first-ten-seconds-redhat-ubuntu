@@ -430,20 +430,38 @@ sudo systemctl daemon-reload
 sudo mount -o remount /dev/shm
 ok "/dev/shm: noexec,nosuid,nodev (active now)."
 
-# --- /tmp: hardened tmp.mount drop-in ----------------------------------------
-# NOTE: enabling tmp.mount makes /tmp a tmpfs (RAM-backed, sized to 50% of RAM).
-# Effective on next reboot to avoid disrupting anything currently using /tmp.
-sudo mkdir -p /etc/systemd/system/tmp.mount.d
-TMP_DROPIN=$(mktemp)
-cat > "$TMP_DROPIN" <<'EOF'
+# --- /tmp: full tmp.mount unit -----------------------------------------------
+# Ubuntu does not ship a tmp.mount unit; RHEL ships one disabled by default.
+# Writing a COMPLETE unit at /etc/systemd/system/tmp.mount works on both
+# (on RHEL it shadows /usr/lib/systemd/system/tmp.mount). Activated on the
+# next reboot to avoid disrupting processes currently using /tmp.
+# Clean up the drop-in-only approach used by older versions of this script:
+sudo rm -rf /etc/systemd/system/tmp.mount.d
+TMP_UNIT=$(mktemp)
+cat > "$TMP_UNIT" <<'EOF'
 # Managed by first-ten.sh
+[Unit]
+Description=Temporary Directory /tmp (hardened)
+Documentation=man:hier(7)
+ConditionPathIsSymbolicLink=!/tmp
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+After=swap.target
+
 [Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
 Options=mode=1777,strictatime,nosuid,nodev,noexec,size=50%
+
+[Install]
+WantedBy=local-fs.target
 EOF
-sudo install -m 0644 -o root -g root "$TMP_DROPIN" /etc/systemd/system/tmp.mount.d/override.conf
-rm -f "$TMP_DROPIN"
+sudo install -m 0644 -o root -g root "$TMP_UNIT" /etc/systemd/system/tmp.mount
+rm -f "$TMP_UNIT"
 sudo systemctl daemon-reload
-sudo systemctl enable tmp.mount >/dev/null 2>&1 || true
+sudo systemctl enable tmp.mount >/dev/null
 ok "/tmp: tmp.mount enabled with nosuid,nodev,noexec (effective on next reboot)."
 
 # --- /var/tmp: bind-mount on itself with hardening ---------------------------
@@ -556,3 +574,4 @@ ${YELLOW}NOTE:${RESET} /tmp will become a tmpfs (RAM-backed, 50% of RAM) on
 next reboot. Any files currently in /tmp will be masked (not deleted) once
 the tmpfs is mounted. Move anything you need to keep out of /tmp first.
 EOF
+
