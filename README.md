@@ -1,4 +1,4 @@
-![First-ten-post-run](https://i.ibb.co/4N5QXww/After-Running-Script.png)
+![First-ten-post-run](first-ten-summary.png)
 
 # first-ten-seconds-redhat-ubuntu
 
