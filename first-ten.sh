@@ -424,6 +424,9 @@ else
     echo "tmpfs /dev/shm tmpfs defaults,noexec,nosuid,nodev 0 0" | \
         sudo tee -a /etc/fstab >/dev/null
 fi
+# Let systemd see the fstab change before we remount, otherwise mount(8) prints
+# a "fstab modified, systemd still uses the old version" hint.
+sudo systemctl daemon-reload
 sudo mount -o remount /dev/shm
 ok "/dev/shm: noexec,nosuid,nodev (active now)."
 
@@ -553,4 +556,3 @@ ${YELLOW}NOTE:${RESET} /tmp will become a tmpfs (RAM-backed, 50% of RAM) on
 next reboot. Any files currently in /tmp will be masked (not deleted) once
 the tmpfs is mounted. Move anything you need to keep out of /tmp first.
 EOF
-
