@@ -2,107 +2,178 @@
 
 # first-ten-seconds-redhat-ubuntu
 
-A bash script to help perform initial security hardening steps on a new Rocky Linux 9, AlmaLinux 9, Red Hat 9, or Ubuntu 24.04 server quickly and easily.
+A bash script to help perform initial security hardening on a freshly installed
+**Ubuntu 22.04+** or **RHEL 9+** family server (Rocky Linux, AlmaLinux,
+CentOS Stream) quickly and easily.
 
 ### Background
 
-Note: I changed the name of this project from first-ten-seconds-centos-ubuntu to first-ten-seconds-redhat-ubuntu to account for the fundamental changes made by Red Hat and the CentOS project, making it CentOS unsuitable for many uses. I'm shifting to CentOS alternatives like Rocky Linux and Alma Linux. 
+> Note: this project was renamed from `first-ten-seconds-centos-ubuntu` to
+> `first-ten-seconds-redhat-ubuntu` when CentOS Linux 8 was discontinued. It now
+> targets the modern RHEL 9 family (Rocky, AlmaLinux, CentOS Stream, RHEL) and
+> Ubuntu 22.04+.
 
-This doesn't "lock down" your server completely, but improves the security posture of a new Red Hat 9, Rocky Linux 9, AlmaLinux 9 or Ubuntu 24.04 server so you can take more time with further improvements if you need to, or be up and running quickly if this provides what you need.
+This script doesn't fully "lock down" your server, but it raises the baseline
+security posture so you can either move on to more in-depth hardening or be up
+and running quickly if this gives you what you need.
 
-Inspired by Jerry Gamblin's blog post: https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/ as well as Bryan Kennedy's post: https://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers, and DigitalOcean guides, Red Hat, and Ubuntu security best practices, and things I like to do myself for new servers.
+Inspired by Jerry Gamblin's blog post:
+<https://jerrygamblin.com/2016/07/13/my-first-10-seconds-on-a-server/>, Bryan
+Kennedy's "My First 5 Minutes On A Server" post, various DigitalOcean guides,
+and Red Hat and Ubuntu security best practices.
 
-The script will determine if it's being run on a Rocky Linux, AlmaLinux, Red Hat, or Ubuntu server and will run commands appropriate for the OS.
+The script auto-detects which distribution it's running on (via
+`/etc/os-release`) and applies the appropriate commands. It also verifies a
+supported OS version before doing anything, refuses to run as root, and
+validates the SSH config with `sshd -t` before reloading sshd so a typo can't
+lock you out.
 
-It is strongly recommended to only run this on clean installs after a non-root user with sudo permission has been set up and key based ssh authentication is configured and tested for that user. 
+It is strongly recommended to only run this on clean installs, after a
+non-root user with sudo permission has been set up and **key-based SSH
+authentication has been configured and tested for that user**.
 
-The following tutorials can help you set up key based authentication:
+The following tutorials can help you set up key-based authentication:
 
-My YouTube series, part 1 through 7 for key based authentication on Ubuntu: https://www.youtube.com/watch?v=ugpAr5fhA1s&t=16s
+- YouTube series (parts 1–7) for key-based authentication on Ubuntu:
+  <https://www.youtube.com/watch?v=ugpAr5fhA1s>
+- DigitalOcean — How to set up SSH keys on Rocky Linux 9:
+  <https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-rocky-linux-9>
+- DigitalOcean — How to set up SSH keys on Ubuntu:
+  <https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu>
 
-Digital Ocean CentOS 8 Key Based Authentication tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-centos-8
+### Project Goals
 
-Digital Ocean Ubuntu 20.04 Key Based Authentication tutorial: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04
-
-This script was created in support of my Linux Security course to give students a jump on securing newly built CentOS and Ubuntu servers.
-
-### [Project Goals](#project-goals)
-
-This project seeks to roll a few common security best practices for new servers into a script that will determine whether it's being run on CentOS or Ubuntu and will run the security related commands appropriate for the OS it's being run on.
+Roll a focused set of security best practices for new servers into a single
+script that detects the distribution it's running on and applies the
+appropriate commands for that OS. Stay small enough to read end-to-end (not a
+full CIS Benchmark implementation), and be safe to re-run (idempotent).
 
 ### What It Does
 
-This script will do the following for Ubuntu:
+The same set of hardening steps is applied to both Ubuntu and the RHEL family;
+implementation details differ where the distros differ (e.g. ufw vs firewalld,
+apt vs dnf).
 
-1. Ensure a non-root user is set up.
-2. Ensure non-root user also has sudo permission (script won't continue without it).
-3. Ensure SSH is allowed through the ufw firewall.
-4. Ensure ufw firewall is enabled.
-5. Lock down SSH if you choose y for that step.
+1. **Preflight checks**
 
-   1. Set SSH not to display banner
-   1. Disable all forwarding
-   1. Disable root login over SSH
-   1. Ignore rhosts
-   1. Disable password authentication
-   
-6. Install fail2ban and configured it to protect SSH. 
-(note) For a default Ubuntu server installation, automatic security updates are enabled so no action was taken regarding updates.
+   - Refuses to run as root.
+   - Verifies the invoking user has sudo, prompts once, then keeps the sudo
+     timestamp fresh in the background.
+   - Detects distribution and version; bails out on anything older than
+     Ubuntu 22.04 or RHEL 9.
 
-The script will do the following for Red Hat and Red Hat based distro's:
+2. **Package metadata refresh** — `apt-get update` or `dnf makecache`.
 
-1. Ensure a non-root user is set up.
-2. Ensure non-root user also has sudo permission (script won't continue without it).
-3. Ensure SSH is allowed through the firewalld firewall.
-4. Ensure firewalld firewall is enabled.
-5. Locked down SSH if you choose y for that step.
+3. **Host firewall**
 
-   1. Set SSH not to display banner
-   1. Disable all forwarding
-   1. Disable root login over SSH
-   1. Ignore rhosts
-   1. Disable password authentication
+   - Ubuntu: installs and enables `ufw`, allows SSH.
+   - RHEL family: installs and enables `firewalld`, allows the SSH service.
 
-6. Install fail2ban and configured it to protect SSH.
-7. Ensure automatic security updates are configured.
+4. **Kernel network hardening** — a single drop-in at
+   `/etc/sysctl.d/99-first-ten.conf` enabling:
+
+   - Reverse path filtering, SYN cookies, log martians.
+   - No IP forwarding, no source routing, no ICMP redirects (sent or received).
+   - No IPv6 router advertisements.
+   - `fs.suid_dumpable=0` (no core dumps from SUID binaries).
+   - `kernel.dmesg_restrict=1` (only root reads kernel logs).
+
+5. **SSH hardening** via a drop-in at
+   `/etc/ssh/sshd_config.d/99-first-ten.conf`. The drop-in is validated with
+   `sshd -t` before sshd is reloaded.
+
+   - `PermitRootLogin no`
+   - `IgnoreRhosts yes`
+   - `DisableForwarding yes`
+   - `DebianBanner no` (Ubuntu only)
+   - `PasswordAuthentication no` — **only** if `authorized_keys` is present
+     for the invoking user **and** the user confirms at the prompt. You're
+     warned to open a second SSH session and verify your key works before
+     confirming.
+   - `MaxAuthTries 3`, `LoginGraceTime 30`, `ClientAliveInterval 300`,
+     `ClientAliveCountMax 2` (~10 min idle disconnect).
+   - Modern crypto only: curve25519, chacha20-poly1305 and AES-GCM ciphers,
+     ETM MACs, ed25519 host keys.
+
+6. **fail2ban** — installs fail2ban (pulling in EPEL on RHEL when needed) and
+   configures an `[sshd]` jail using the `systemd` backend (so it works the
+   same on both distros without log-path differences) with a distro-appropriate
+   banaction (`ufw` on Ubuntu, `firewallcmd-rich-rules` on RHEL).
+
+7. **Filesystem mount hardening** — `nosuid,nodev,noexec` applied to:
+
+   - `/dev/shm` — via `/etc/fstab`, remounted immediately.
+   - `/tmp` — systemd `tmp.mount` enabled with a hardened drop-in.
+     **Effective on next reboot.** Note that this converts `/tmp` to a tmpfs
+     sized at 50% of RAM; anything currently in `/tmp` is masked (not
+     deleted) once the tmpfs mounts.
+   - `/var/tmp` — bind-mounted onto itself with hardened options via a
+     systemd `.mount` unit, active immediately.
+
+8. **auditd** — installed and enabled with the default ruleset. Add your own
+   rules under `/etc/audit/rules.d/` to customize.
+
+9. **Automatic security updates**
+
+   - Ubuntu: `unattended-upgrades` plus `/etc/apt/apt.conf.d/20auto-upgrades`
+     to enable daily updates and unattended upgrades.
+   - RHEL family: `dnf-automatic` configured with `upgrade_type = security`
+     and `apply_updates = yes`, then `dnf-automatic.timer` enabled.
 
 ### Prerequisites
 
-You must have sudo permissions to run the commands inside the script.
+You must have sudo permissions to run the commands inside the script. The
+script should **not** be run as root — run it as your non-root sudo-enabled
+user and enter sudo credentials when prompted.
 
-The script should not be run as root, but the user running it will be prompted for sudo credentials once it runs. sudo password should be entered to continue.
-
-The script will provide the greatest benefit if key-based SSH authentication is set up and tested prior to running.
+The script will give you the greatest benefit (and protect you from a
+lockout) if key-based SSH authentication is set up and tested before you run
+it.
 
 ### Warning
 
-Be sure you have read and understand what this file does before running it.
-
+Be sure you've read and understand what this script does before running it.
 You can read the man page for each command and option to see what it does.
 
-Any time the creator of a script says it has to be run with sudo permissions or as root, understand why and use caution.
+Any time the creator of a script says it has to be run with sudo permissions
+or as root, understand why and use caution.
 
-***This script has to be run by a user with sudo permissions because the system update, firewall, and ssh related commands it uses must be run as root. It should be run by a non-root user but sudo credentials should be provided when prompted.***
+***This script must be run by a user with sudo permissions because the
+firewall, package, sshd, sysctl, mount, and service commands it uses require
+root. It should be run as a non-root user; sudo credentials are entered when
+prompted.***
+
+A couple of behavior notes worth flagging:
+
+- The `/tmp` change becomes effective on next reboot and switches `/tmp` to
+  tmpfs (RAM-backed). On very small VMs this can be tight — adjust the
+  `size=50%` in `/etc/systemd/system/tmp.mount.d/override.conf` if needed.
+- The strict SSH crypto list excludes very old algorithms. Any reasonably
+  modern SSH client works fine; ancient clients may need the list relaxed.
+- The script is idempotent — safe to re-run if something fails midway.
 
 ### Usage
 
-The latest version of this script can be run with the following single line at the Linux terminal on any Rocky Linux 8, Alma Linux 8, Red Hat 8, or Ubuntu 20.04 new installation after a non-root user with sudo privileges has been set up and key based authentication for that user using SSH configured:
+The latest version of this script can be run with the following one-liner on
+a fresh Ubuntu 22.04+ or RHEL 9+ server, after a non-root user with sudo
+privileges has been set up and key-based SSH authentication for that user
+is configured:
 
-`bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh)`
+```
+bash <(curl -s https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh)
+```
 
-Alternatively, you can clone the full repository locally or just copy and run the first-ten.sh script from the link below.
-
-`https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh`
-
-You could use the following commands (you may have to install wget first if you did a minimal install):
+Alternatively, download and run it locally so you can review it first
+(recommended):
 
 ```
 wget https://raw.githubusercontent.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/master/first-ten.sh
+less first-ten.sh        # review before running
 chmod +x first-ten.sh
 ./first-ten.sh
 ```
 
-You can also follow the traditional method for GitHub projects and create your own clone then run from that.
+Or clone the repository:
 
 ```
 git clone https://github.com/TedLeRoy/first-ten-seconds-redhat-ubuntu.git
@@ -112,4 +183,7 @@ cd first-ten-seconds-redhat-ubuntu
 
 ### Issues, Feature Requests, Input
 
-Please report issues, request features, or provide your input or feedback about the script [here](https://github.com/TedLeRoy/first-ten-seconds-centos-ubuntu/issues).
+Please report issues, request features, or provide input or feedback about
+the script
+[here](https://github.com/TedLeRoy/first-ten-seconds-redhat-ubuntu/issues).
+
